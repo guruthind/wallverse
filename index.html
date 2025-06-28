@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WallVerse - AI Wallpapers by Guru</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    body {
+      background-color: #121212;
+      color: white;
+    }
+    header {
+      padding: 20px;
+      text-align: center;
+      background: #1f1f1f;
+      font-size: 24px;
+      font-weight: bold;
+      color: #00ffe1;
+      box-shadow: 0 2px 10px #000;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      background-color: #1a1a1a;
+      padding: 10px;
+    }
+    nav button {
+      padding: 8px 16px;
+      background-color: #00ffe1;
+      color: black;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    nav button.active {
+      background-color: #00bba1;
+    }
+    .search-container {
+      text-align: center;
+      margin: 10px 20px;
+    }
+    .search-container input {
+      width: 100%;
+      max-width: 400px;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+    .upload-area {
+      border: 2px dashed #00ffe1;
+      border-radius: 10px;
+      padding: 30px;
+      margin: 20px;
+      text-align: center;
+      transition: background 0.3s;
+    }
+    .upload-area.dragover {
+      background-color: rgba(0, 255, 225, 0.1);
+    }
+    .upload-area input {
+      display: none;
+    }
+    .upload-area label {
+      display: inline-block;
+      background: #00ffe1;
+      color: black;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .social-share {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .social-share a {
+      display: inline-block;
+      margin: 0 10px;
+      color: #00ffe1;
+      font-size: 20px;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .social-share a:hover {
+      color: white;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 16px;
+      padding: 20px;
+    }
+    .wallpaper {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .wallpaper img {
+      width: 100%;
+      height: auto;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .wallpaper img:hover {
+      transform: scale(1.05);
+    }
+    .download-btn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: #00ffe1;
+      color: black;
+      padding: 6px 10px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    footer {
+      background: #1f1f1f;
+      text-align: center;
+      padding: 10px;
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <header>WallVerse - AI Wallpapers by Guru</header>
+  <nav>
+    <button class="active" onclick="filterCategory('all')">All</button>
+    <button onclick="filterCategory('nature')">Nature</button>
+    <button onclick="filterCategory('sci-fi')">Sci-Fi</button>
+    <button onclick="filterCategory('abstract')">Abstract</button>
+    <button onclick="filterCategory('minimal')">Minimal</button>
+    <button onclick="filterCategory('trending')">Trending</button>
+  </nav>
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search wallpapers..." oninput="searchWallpapers()" />
+  </div>
+  <div class="upload-area" id="uploadArea">
+    <label for="uploadInput">Upload New Wallpapers</label>
+    <input type="file" id="uploadInput" multiple accept="image/*">
+  </div>
+  <div class="social-share">
+    <span>📤 Share this website:</span>
+    <a href="https://wa.me/?text=Check%20out%20these%20awesome%20AI%20wallpapers!%20https://yourdomain.com" target="_blank">WhatsApp</a>
+    <a href="https://www.instagram.com/guru_thind_astaad" target="_blank">Instagram</a>
+    <a href="mailto:?subject=AI%20Wallpapers&body=Check%20out%20these%20wallpapers%20by%20Guru!%20https://yourdomain.com">Email</a>
+  </div>
+  <div class="gallery" id="gallery">
+    <div class="wallpaper" data-category="nature" data-name="Forest">
+      <img src="wallpapers/sample1.jpg" alt="Wallpaper 1">
+      <a class="download-btn" href="wallpapers/sample1.jpg" download>Download</a>
+    </div>
+  </div>
+  <footer>
+    Made with ❤️ by Guru | Follow on Instagram: @guru_thind_astaad
+  </footer>
+  <script>
+    function filterCategory(category) {
+      const buttons = document.querySelectorAll('nav button');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      const wallpapers = document.querySelectorAll('.wallpaper');
+      wallpapers.forEach(wp => {
+        if (category === 'all' || wp.dataset.category === category) {
+          wp.style.display = 'block';
+        } else {
+          wp.style.display = 'none';
+        }
+      });
+    }
+
+    function searchWallpapers() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const wallpapers = document.querySelectorAll('.wallpaper');
+      wallpapers.forEach(wp => {
+        const name = wp.dataset.name.toLowerCase();
+        wp.style.display = name.includes(query) ? 'block' : 'none';
+      });
+    }
+
+    const uploadInput = document.getElementById('uploadInput');
+    const gallery = document.getElementById('gallery');
+    uploadInput.addEventListener('change', () => {
+      const files = uploadInput.files;
+      for (const file of files) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const div = document.createElement('div');
+          div.classList.add('wallpaper');
+          div.dataset.name = file.name.split('.')[0];
+          div.dataset.category = "trending";
+          div.innerHTML = `
+            <img src="${e.target.result}" alt="${file.name}">
+            <a class="download-btn" href="${e.target.result}" download>Download</a>
+          `;
+          gallery.prepend(div);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+</body>
+</html>
